@@ -7,31 +7,12 @@ var session =require('express-session');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://cmpt218:pass@ds061777.mlab.com:61777/cmpt218"
-// {
-//
-//   poolSize: 20,
-//   {socketTimeoutMS:480000},
-//   {keepAlive: 300000},
-//   {ssl: true},
-//   {sslValidate: false}
-//
-// };
 
-var username;
-var pass;
+
 var dbo;
-var students;
-var users;
-var student_table;
-var date;
-
 var port = process.env.PORT || 3000;
-var users = [];
 var ssn;
-
-var current_course;
-var name;
-
+var students;
 // parsing body
 app.use(express.json());
 app.use(express.urlencoded( { extended:false} ));
@@ -70,9 +51,6 @@ app.use('/', function(req,res,next){
   console.log(req.method, 'request:', req.url, JSON.stringify(req.body));
   next();
 });
-
-
-
 
 app.get('/', function(req,res,next){
   console.log("checking session");
