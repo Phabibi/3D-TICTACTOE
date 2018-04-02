@@ -21,21 +21,6 @@ app.use(express.urlencoded( { extended:false} ));
 app.use(express.static(path.join(__dirname,'/public/')));
 app.use(session({secret:'PASWAG'}));
 
-var options = {
-  dotfiles: 'ignore',
-  etag: false,
-  extensions: ['htm','html'],
-  index: "login.html"
-}
-
-var admin_option= {
-  dotfiles: 'ignore',
-  etag: false,
-  extensions: ['htm','html'],
-  index: "admin.html"
-}
-
-
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   console.log("Database created!");
@@ -44,8 +29,6 @@ MongoClient.connect(url, function(err, db) {
   students = dbo.collection("students");
   console.log("Collection created");
   });
-
-
 
 app.use('/', function(req,res,next){
   console.log(req.method, 'request:', req.url, JSON.stringify(req.body));
