@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="utf-8">
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="./css/style.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to three dimensional tic tac toe!</h1>
+  <!--  Dont sql inject me or xss me pls-->
+    <ul></ul>
+
+    <section>
+      <form method="post" action= 'adminHome'>
+        <div class="input-field">
+          <i class="material-icons prefix">account_circle</i>
+          <input placeholder="username" type="text" id="username" name="username" for = 'username'  required /> <br />
+          <i class="material-icons prefix">lock</i>
+          <input placeholder="password" type="password" id="password" name="password" required /> <br />
+        </div>
+          <input type="submit" class="waves-effect waves-light btn" value="Login">
+          <a href= "register.html" class="waves-effect waves-light btn"><i class="material-icons left">query_builder</i>Register Now! </a>
+      </form>
+    </section>
+</div>
+</body>
+</html>
