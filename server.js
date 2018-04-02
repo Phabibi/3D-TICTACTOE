@@ -86,3 +86,6 @@ app.get('/', function(req,res,next){
   res.sendFile(__dirname + "/public/login.html");
 
 });
+
+http.createServer(app).listen(port);
+console.log("running on port ", port )
