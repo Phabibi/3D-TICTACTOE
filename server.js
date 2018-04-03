@@ -7,6 +7,7 @@ var session =require('express-session');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://cmpt218:pass@ds061777.mlab.com:61777/cmpt218"
+var bcrypt = require('bcryptjs');
 
 
 var dbo;
@@ -48,5 +49,10 @@ app.get('/', function(req,res,next){
 
 });
 
+app.post('/register', function(req,res){
+    var newUser = {
+
+    }
+});
 http.createServer(app).listen(port);
 console.log("running on port ", port )
