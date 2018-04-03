@@ -24,12 +24,12 @@ app.use(session({secret:'PASWAG'}));
 
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  console.log("Database created!");
+  console.log("HuMONGOus database created!");
 
   dbo = db.db("cmpt218");
-  students = dbo.collection("students");
-  console.log("Collection created");
-  });
+  students = dbo.collection("users");
+  console.log("Collection connected!");
+});
 
 app.use('/', function(req,res,next){
   console.log(req.method, 'request:', req.url, JSON.stringify(req.body));
@@ -51,8 +51,32 @@ app.get('/', function(req,res,next){
 
 app.post('/register', function(req,res){
     var newUser = {
+      first_name : req.body.first_name,
+      last_name : req.body.last_name,
+      username : req.body.username,
+      password : req.body.password,
+      gender : req.body.gender,
+      age : req.body.age,
+      email : req.body.email,
+    };
+    bcrypt.genSalt(10, function(err, salt) {
+      bcrypt.hash(newUser.password, salt, function(err, hash) {
+          if(err) throw err;
+          newUser.password = hash;
+            dbo.collection("users").insertOne(newUser, function(err, res) {
+              if (err) throw err;
+              console.log("Inserted user: " + req.body.username + " with password "+ newUser.password);
+            //  db.close();
+            });
+            res.redirect('/registersuccess.html');
+        });
+    });
 
-    }
+      /*  dbo.collection("users").insertOne(newUser, function(err, res) {
+              if (err) throw err;
+              console.log("Inserted user: " + req.body.username);
+            //  db.close();
+          });*/
 });
 http.createServer(app).listen(port);
 console.log("running on port ", port )
