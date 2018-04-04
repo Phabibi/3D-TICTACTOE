@@ -127,6 +127,5 @@ app.post('/registersuccess',function(req,res){
             //  db.close();
           });*/
 
-app.post('/regis')
 http.createServer(app).listen(port);
 console.log("running on port ", port )
