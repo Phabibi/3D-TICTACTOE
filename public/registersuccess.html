@@ -8,17 +8,16 @@
       <div class="container white z-depth-2">
          <ul class="tabs teal">
            <div class="row">
-            <li class="tab col s6"><a class="white-text active" href="#login">login</a></li>
-            <li class="tab col s6"><a class="white-text" href="#register">register</a></li>
+            <li class="tab col s12"><a class="white-text active" href="#login">login</a></li>
           </div>
          </ul>
          <div id="login" class="col s12">
-            <form class="col s12">
+            <form class="col s12" action="" method="post" >
                <div class="form-container">
                   <h3 class="teal-text">Successfully Registered! Now, login...</h3>
                   <div class="row">
                      <div class="input-field col s12">
-                        <input id="email" type="email" class="validate">
+                        <input id="email" type="email" name="email" class="validate">
                         <label for="email">Email</label>
                      </div>
                   </div>
@@ -30,7 +29,7 @@
                   </div>
                   <br>
                   <center>
-                     <button class="btn waves-effect waves-light teal" type="submit" name="action">Connect</button>
+                     <button class="btn waves-effect waves-light teal" type="submit" >Connect</button>
                      <br>
                      <br>
                      <a href="">Forgotten password?</a>
@@ -38,56 +37,7 @@
                </div>
             </form>
          </div>
-         <div id="register" class="col s6" style:"padding:0;">
-            <form class="col 6" action="/register" method="post">
-               <div class="form-container">
-                  <h3 class="teal-text">Welcome</h3>
-                  <div class="row">
-                     <div class="input-field col s6">
-                        <input id="first_name" name="first_name" type="text" class="validate">
-                        <label for="first_name">First Name</label>
-                     </div>
-                     <div class="input-field col s6">
-                        <input id="last_name" name="last_name" type="text" class="validate">
-                        <label for="last_name">Last Name</label>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="input-field col s12">
-                        <input id="first_name" name="username" type="text" class="validate">
-                        <label for="username">Username</label>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="input-field col s12">
-                        <input id="email" name="email" type="email" class="validate">
-                        <label for="email">Email</label>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="input-field col s12">
-                        <input id="gender" name="gender" type="text" class="validate">
-                        <label for="email-confirm">Gender</label>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="input-field col s12">
-                        <input id="password" type="password" class="validate" name="password">
-                        <label for="password">Password</label>
-                     </div>
-                  </div>
-                  <div class="row">
-                     <div class="input-field col s12">
-                        <input id="age" name="age" type="number" class="validate">
-                        <label for="password-confirm">Age</label>
-                     </div>
-                  </div>
-                  <center>
-                     <button class="btn waves-effect waves-light teal" type="submit">submit</button>
-                  </center>
-               </div>
-            </form>
-         </div>
+
       </div>
       <script> src = "./style.js/" </script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

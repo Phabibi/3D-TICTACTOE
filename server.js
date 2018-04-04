@@ -49,6 +49,11 @@ app.get('/', function(req,res,next){
 
 });
 
+app.get('/registersuccess' , function(req,res){
+  console.log("register success");
+  return res.sendFile(__dirname + "/public/registersuccess.html");
+});
+
 app.post('/register', function(req,res){
     var newUser = {
       first_name : req.body.first_name,
@@ -68,15 +73,60 @@ app.post('/register', function(req,res){
               console.log("Inserted user: " + req.body.username + " with password "+ newUser.password);
             //  db.close();
             });
-            res.redirect('/registersuccess.html');
+            res.redirect('/registersuccess');
+
+
         });
     });
+
+    });
+app.post('/registersuccess',function(req,res){
+      console.log("checking username and pass")
+      console.log("current email ", req.body.email)
+      // students.findOne({email:req.body.email}, function(err,user){
+      //   if(err) throw err;
+      //   else {
+      //     console.log("the user is" , user);
+      //   }
+      // })
+
+      var user_exist;
+      var user_check = dbo.collection("users").find({}).toArray(function(err, result){
+        if(err) throw err;
+
+        else{
+          for(var i = 0 ; i < result.length ; i++)
+          {
+            if(result[i].email == req.body.email)
+            {
+              console.log("found my mans" , result[i].first_name);
+              user_exist = result[i].email;
+              break;
+            }
+            else{
+
+              i++;
+            }
+          }
+          if(user_exist === undefined)
+          {
+            console.log("mans not here");
+          }
+          else {
+            console.log("heres the result ", user_exist  );
+
+          }
+        }
+      });
+
+});
 
       /*  dbo.collection("users").insertOne(newUser, function(err, res) {
               if (err) throw err;
               console.log("Inserted user: " + req.body.username);
             //  db.close();
           });*/
-});
+
+app.post('/regis')
 http.createServer(app).listen(port);
 console.log("running on port ", port )
