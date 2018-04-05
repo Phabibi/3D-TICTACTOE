@@ -8,12 +8,15 @@ var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://cmpt218:pass@ds061777.mlab.com:61777/cmpt218"
 var bcrypt = require('bcryptjs');
-
-
-var dbo;
 var port = process.env.PORT || 3000;
+
+var server = http.createServer(app).listen(port);
+var io = require('socket.io')(server);
+var dbo;
 var ssn;
 var students;
+
+var dynamic = require ('./public/dynamic.js');
 // parsing body
 app.use(express.json());
 app.use(express.urlencoded( { extended:false} ));
@@ -111,13 +114,53 @@ app.post('/registersuccess',function(req,res){
           if(user_exist === undefined)
           {
             console.log("mans not here");
+            res.redirect('/registersuccess');
           }
           else {
-            console.log("heres the result ", user_exist  );
-
+            console.log("heres the result ", user_exist);
+            res.redirect('/lobby');
           }
         }
       });
+app.get("/lobby", function(req,res){
+  console.log("serving page")
+  var result;
+  var lobby = dynamic.lobby(result);
+  fs.writeFile("./lobby.html",lobby,function(err,data){
+
+      if(err)
+      {
+        console.log(err);
+      }
+
+      else{
+        console.log("file write success")
+        res.sendFile(__dirname + "/lobby.html");
+      }
+
+  });
+
+});
+//   io.on('connection', function(socket){
+//     console.log('new connection');
+//     clients++;
+//     socket.emit('clientChange',clients);
+//     socket.broadcast.emit('clientChange',clients);
+//
+//   socket.on('chat', function(message){
+//     socket.broadcast.emit('message',message);
+//   });
+//
+//   socket.on('disconnect', function(){
+//     console.log('Disconnect event');
+//     clients--;
+//     //socket.emit('clientChange',clients);
+//     socket.broadcast.emit('clientChange',clients);
+//   });
+//
+//   socket.emit("message", "You're connected!!!");
+// });
+
 
 });
 
@@ -127,5 +170,4 @@ app.post('/registersuccess',function(req,res){
             //  db.close();
           });*/
 
-http.createServer(app).listen(port);
 console.log("running on port ", port )
