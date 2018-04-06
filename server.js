@@ -9,7 +9,7 @@ var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://cmpt218:pass@ds061777.mlab.com:61777/cmpt218"
 var bcrypt = require('bcryptjs');
 var port = process.env.PORT || 3000;
-
+var Bigres;
 var server = http.createServer(app).listen(port);
 var io = require('socket.io')(server);
 var dbo;
@@ -83,44 +83,28 @@ app.post('/register', function(req,res){
     });
 
     });
-app.post('/registersuccess',function(req,res){
+app.post('/login',function(req,res){
       console.log("checking username and pass")
       console.log("current email ", req.body.email)
-      // students.findOne({email:req.body.email}, function(err,user){
-      //   if(err) throw err;
-      //   else {
-      //     console.log("the user is" , user);
-      //   }
-      // })
-
-      var user_exist;
+      Bigres = res;
+      var user_exist = false;
       var user_check = dbo.collection("users").find({}).toArray(function(err, result){
-        if(err) throw err;
-
-        else{
-          for(var i = 0 ; i < result.length ; i++)
-          {
-            if(result[i].email == req.body.email)
-            {
-              console.log("found my mans" , result[i].first_name);
-              user_exist = result[i].email;
-              break;
-            }
-            else{
-
-              i++;
-            }
-          }
-          if(user_exist === undefined)
-          {
-            console.log("mans not here");
-            res.redirect('/registersuccess');
-          }
-          else {
-            console.log("heres the result ", user_exist);
-            res.redirect('/lobby');
-          }
+        if(result === undefined){
+          Bigres.redirect('/login.html');
         }
+          if (err) throw err;
+          for(var i = 0 ; i < result.length ; i++){
+            if(result[i].email === req.body.email){
+              console.log("found my mans" , result[i].first_name);
+              console.log("ok checking pass now...");
+              bcrypt.compare(req.body.password, result[i].password, function(err, res) {
+                user_exist = res;
+                console.log(user_exist + "you entered ");
+                res? Bigres.redirect('/lobby') : Bigres.redirect('/login.html');
+              });
+            }
+          }
+        });
       });
 app.get("/lobby", function(req,res){
   console.log("serving page")
@@ -161,13 +145,10 @@ app.get("/lobby", function(req,res){
 //   socket.emit("message", "You're connected!!!");
 // });
 
-
-});
-
       /*  dbo.collection("users").insertOne(newUser, function(err, res) {
               if (err) throw err;
               console.log("Inserted user: " + req.body.username);
             //  db.close();
           });*/
 
-console.log("running on port ", port )
+console.log("running on port ", port );
