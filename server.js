@@ -148,7 +148,6 @@ app.get("/lobby", function(req,res){
 //
 //   socket.emit("message", "You're connected!!!");
 // });
-});
 app.get("/gamepage" , function(req,res){
 
 
@@ -159,6 +158,6 @@ app.get("/gamepage" , function(req,res){
 });
 
 
-     
+
 
 console.log("running on port ", port );
