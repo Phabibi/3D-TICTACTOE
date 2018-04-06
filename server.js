@@ -140,7 +140,11 @@ app.get("/lobby", function(req,res){
 
   });
 
+
+
 });
+
+
 //   io.on('connection', function(socket){
 //     console.log('new connection');
 //     clients++;
@@ -160,8 +164,13 @@ app.get("/lobby", function(req,res){
 //
 //   socket.emit("message", "You're connected!!!");
 // });
+});
+app.get("/gamepage" , function(req,res){
 
+  console.log("serving game page");
+  //everyone can see this, need to fix
 
+  return res.sendFile(__dirname + "/gamepage.html");
 });
 
       /*  dbo.collection("users").insertOne(newUser, function(err, res) {
