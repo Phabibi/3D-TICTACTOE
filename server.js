@@ -15,6 +15,9 @@ var io = require('socket.io')(server);
 var dbo;
 var ssn;
 var students;
+var turn;
+
+var clients;
 
 var dynamic = require ('./public/dynamic.js');
 // parsing body
@@ -32,6 +35,37 @@ MongoClient.connect(url, function(err, db) {
   dbo = db.db("cmpt218");
   students = dbo.collection("users");
   console.log("Collection connected!");
+});
+io.on('connection', function(socket){
+    console.log('new connection');
+    clients++;
+
+
+
+    socket.on('themove', function(move){
+      console.log("broadcasting the move" , move);
+
+      if(move.current === 1)
+      {
+        move.current= 2;
+      }
+
+      else if(move.current === 2) {
+        move.current = 1;
+      }
+
+      console.log(move.current);
+
+
+
+      socket.broadcast.emit('the_move', move);
+    });
+
+  socket.on('disconnect', function(){
+    console.log('Disconnect event');
+    clients--;
+  });
+
 });
 
 app.use('/', function(req,res,next){
@@ -90,7 +124,7 @@ app.post('/login',function(req,res){
       var user_exist = false;
       var user_check = dbo.collection("users").find({}).toArray(function(err, result){
         if(result === undefined){
-          Bigres.redirect('/login.html');
+          Bigres.redirect('/');
         }
           if (err) throw err;
           for(var i = 0 ; i < result.length ; i++){
@@ -100,7 +134,7 @@ app.post('/login',function(req,res){
               bcrypt.compare(req.body.password, result[i].password, function(err, res) {
                 user_exist = res;
                 console.log(user_exist + "you entered ");
-                res? Bigres.redirect('/lobby') : Bigres.redirect('/login.html');
+                res? Bigres.redirect('/lobby') : Bigres.redirect('/');
               });
             }
           }
@@ -127,27 +161,24 @@ app.get("/lobby", function(req,res){
 
 
 });
+app.post("/lobby" , function(req,res){
 
 
-//   io.on('connection', function(socket){
-//     console.log('new connection');
-//     clients++;
-//     socket.emit('clientChange',clients);
-//     socket.broadcast.emit('clientChange',clients);
-//
-//   socket.on('chat', function(message){
-//     socket.broadcast.emit('message',message);
-//   });
-//
-//   socket.on('disconnect', function(){
-//     console.log('Disconnect event');
-//     clients--;
-//     //socket.emit('clientChange',clients);
-//     socket.broadcast.emit('clientChange',clients);
-//   });
-//
-//   socket.emit("message", "You're connected!!!");
-// });
+  console.log("serving game page");
+  //everyone can see this, need to fix
+    if(clients > 2)
+    {
+      //join room
+    }
+
+
+  res.redirect('/gamepage');
+});
+
+
+
+
+
 app.get("/gamepage" , function(req,res){
 
 

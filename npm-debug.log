@@ -1,73 +1,57 @@
 0 info it worked if it ends with ok
-1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', '-g', 'nodemon' ]
+1 verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'update', 'socket.io' ]
 2 info using npm@3.5.2
 3 info using node@v4.2.6
-4 silly loadCurrentTree Starting
-5 silly install loadCurrentTree
-6 silly install readGlobalPackageData
-7 silly fetchPackageMetaData nodemon
-8 silly fetchNamedPackageData nodemon
-9 silly mapToRegistry name nodemon
-10 silly mapToRegistry using default registry
-11 silly mapToRegistry registry https://registry.npmjs.org/
-12 silly mapToRegistry uri https://registry.npmjs.org/nodemon
-13 verbose request uri https://registry.npmjs.org/nodemon
-14 verbose request no auth needed
-15 info attempt registry request try #1 at 1:52:48 PM
-16 verbose request id 9227ea141d872bb7
-17 http request GET https://registry.npmjs.org/nodemon
-18 http 200 https://registry.npmjs.org/nodemon
-19 verbose headers { 'content-type': 'application/json; charset=UTF-8',
-19 verbose headers   server: 'UploadServer',
-19 verbose headers   'cache-control': 'max-age=300',
-19 verbose headers   'last-modified': 'Tue, 3 Apr 2018 2:53:11 GMT',
-19 verbose headers   etag: '"5ac2ec97-5217f"',
-19 verbose headers   'x-npm-region': 'US-West',
-19 verbose headers   'content-encoding': 'gzip',
-19 verbose headers   'content-length': '36635',
-19 verbose headers   'accept-ranges': 'bytes',
-19 verbose headers   date: 'Fri, 06 Apr 2018 20:52:49 GMT',
-19 verbose headers   via: '1.1 varnish',
-19 verbose headers   age: '6635',
-19 verbose headers   connection: 'keep-alive',
-19 verbose headers   'x-served-by': 'cache-sea1030-SEA',
-19 verbose headers   'x-cache': 'HIT',
-19 verbose headers   'x-cache-hits': '19',
-19 verbose headers   'x-timer': 'S1523047969.103222,VS0,VE0',
-19 verbose headers   vary: 'Accept-Encoding, Accept' }
-20 silly get cb [ 200,
-20 silly get   { 'content-type': 'application/json; charset=UTF-8',
-20 silly get     server: 'UploadServer',
-20 silly get     'cache-control': 'max-age=300',
-20 silly get     'last-modified': 'Tue, 3 Apr 2018 2:53:11 GMT',
-20 silly get     etag: '"5ac2ec97-5217f"',
-20 silly get     'x-npm-region': 'US-West',
-20 silly get     'content-encoding': 'gzip',
-20 silly get     'content-length': '36635',
-20 silly get     'accept-ranges': 'bytes',
-20 silly get     date: 'Fri, 06 Apr 2018 20:52:49 GMT',
-20 silly get     via: '1.1 varnish',
-20 silly get     age: '6635',
-20 silly get     connection: 'keep-alive',
-20 silly get     'x-served-by': 'cache-sea1030-SEA',
-20 silly get     'x-cache': 'HIT',
-20 silly get     'x-cache-hits': '19',
-20 silly get     'x-timer': 'S1523047969.103222,VS0,VE0',
-20 silly get     vary: 'Accept-Encoding, Accept' } ]
-21 verbose get saving nodemon to /home/khalili/.npm/registry.npmjs.org/nodemon/.cache.json
-22 verbose stack TypeError: gid must be an unsigned int
-22 verbose stack     at TypeError (native)
-22 verbose stack     at Object.fs.chown (fs.js:1033:11)
-22 verbose stack     at Object.chown (/usr/share/npm/node_modules/graceful-fs/polyfills.js:208:17)
-22 verbose stack     at /usr/share/npm/node_modules/chownr/chownr.js:12:43
-22 verbose stack     at /usr/share/npm/node_modules/graceful-fs/graceful-fs.js:140:16
-22 verbose stack     at FSReqWrap.oncomplete (fs.js:82:15)
-23 verbose cwd /home/khalili/cmpt218/assignment4/3D-TICTACTOE
-24 error Linux 4.4.0-109-generic
-25 error argv "/usr/bin/nodejs" "/usr/bin/npm" "install" "-g" "nodemon"
-26 error node v4.2.6
-27 error npm  v3.5.2
-28 error gid must be an unsigned int
-29 error If you need help, you may report this error at:
-29 error     <https://github.com/npm/npm/issues>
-30 verbose exit [ 1, true ]
+4 silly mapToRegistry name socket.io
+5 silly mapToRegistry using default registry
+6 silly mapToRegistry registry https://registry.npmjs.org/
+7 silly mapToRegistry uri https://registry.npmjs.org/socket.io
+8 verbose request uri https://registry.npmjs.org/socket.io
+9 verbose request no auth needed
+10 info attempt registry request try #1 at 2:29:40 PM
+11 verbose request id 45e7c60c89e70b0c
+12 verbose etag "5abd5bc3-29d91"
+13 verbose lastModified Thu, 29 Mar 2018 21:33:55 GMT
+14 http request GET https://registry.npmjs.org/socket.io
+15 http 304 https://registry.npmjs.org/socket.io
+16 verbose headers { date: 'Sat, 07 Apr 2018 21:29:40 GMT',
+16 verbose headers   via: '1.1 varnish',
+16 verbose headers   'cache-control': 'max-age=300',
+16 verbose headers   etag: '"5abd5bc3-29d91"',
+16 verbose headers   age: '12999',
+16 verbose headers   connection: 'keep-alive',
+16 verbose headers   'x-served-by': 'cache-sea1034-SEA',
+16 verbose headers   'x-cache': 'HIT',
+16 verbose headers   'x-cache-hits': '51',
+16 verbose headers   'x-timer': 'S1523136581.678591,VS0,VE0',
+16 verbose headers   vary: 'Accept-Encoding, Accept' }
+17 silly get cb [ 304,
+17 silly get   { date: 'Sat, 07 Apr 2018 21:29:40 GMT',
+17 silly get     via: '1.1 varnish',
+17 silly get     'cache-control': 'max-age=300',
+17 silly get     etag: '"5abd5bc3-29d91"',
+17 silly get     age: '12999',
+17 silly get     connection: 'keep-alive',
+17 silly get     'x-served-by': 'cache-sea1034-SEA',
+17 silly get     'x-cache': 'HIT',
+17 silly get     'x-cache-hits': '51',
+17 silly get     'x-timer': 'S1523136581.678591,VS0,VE0',
+17 silly get     vary: 'Accept-Encoding, Accept' } ]
+18 verbose etag https://registry.npmjs.org/socket.io from cache
+19 verbose get saving socket.io to /home/phabibi/.npm/registry.npmjs.org/socket.io/.cache.json
+20 verbose stack TypeError: gid must be an unsigned int
+20 verbose stack     at TypeError (native)
+20 verbose stack     at Object.fs.chown (fs.js:1033:11)
+20 verbose stack     at Object.chown (/usr/share/npm/node_modules/graceful-fs/polyfills.js:208:17)
+20 verbose stack     at /usr/share/npm/node_modules/chownr/chownr.js:12:43
+20 verbose stack     at /usr/share/npm/node_modules/graceful-fs/graceful-fs.js:140:16
+20 verbose stack     at FSReqWrap.oncomplete (fs.js:82:15)
+21 verbose cwd /home/phabibi/sfuhome/3D-TICTACTOE
+22 error Linux 4.4.0-109-generic
+23 error argv "/usr/bin/nodejs" "/usr/bin/npm" "update" "socket.io"
+24 error node v4.2.6
+25 error npm  v3.5.2
+26 error gid must be an unsigned int
+27 error If you need help, you may report this error at:
+27 error     <https://github.com/npm/npm/issues>
+28 verbose exit [ 1, true ]
