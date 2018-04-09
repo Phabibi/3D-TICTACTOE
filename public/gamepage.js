@@ -7,31 +7,26 @@ var objj;
 var current = 1;
 var old_current;
 var username;
-var room_name = "parsa";
+var room_name;
 var clientid =0;
-
-
-
-
-
 
 $(document).ready(function() {
   // socket.emit('joinroom', room_name);
 
-  socket.on('connection', function(data){
-      console.log("connected clients", data);
 
+    socket.on('connect', function(socket){
+      socket.emit('joinroom' ,room_name);
 
+      console.log('username ', data.current_user );
+      console.log('connected now joining room');
   });
 
   socket.on('users', function(data){
     username = data.current_user;
-
+    room_name = data.room_name;
+    console.log('room si ', room_name)
     console.log(username + ' has connected')
-    $('#chat').text('Chat '+username);
     socket.emit('chat',{username:username});
-
-
   });
 
 

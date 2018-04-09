@@ -16,14 +16,11 @@ var dbo;
 var ssn;
 var students;
 var turn;
-var room;
+var room = 'marvins';
+var flag = 0;
+var clients;
 
 var current_user;
-
-var clients = 0;
-
-var socket_glob;
-
 
 var test_clients = new Array;
 var sockets = new Array;
@@ -45,6 +42,47 @@ MongoClient.connect(url, function(err, db) {
   students = dbo.collection("users");
   console.log("Collection connected!");
 });
+
+
+  io.on('connection', function(socket){
+      console.log('new connection');
+      clients++;
+      console.log("current_user= " ,current_user);
+
+       // current_user = ssn.username
+
+      socket.on('joinroom', function(data){
+        console.log('joined the room' , room);
+      });
+      socket.join(room);
+
+      socket.emit('users',{current_user:current_user , clients:clients, roomname:room} );
+
+
+      socket.on('chat', function(message){
+        message.username = current_user;
+        socket.broadcast.to(room).emit('message',message);
+      });
+      socket.on('themove', function(move){
+        console.log("broadcasting the move" , move);
+
+        if(move.current === 1)
+        {
+          move.current= 2;
+        }
+        else if(move.current === 2) {
+          move.current = 1;
+        }
+        console.log(move.current);
+        socket.broadcast.emit('the_move', move);
+      });
+
+    socket.on('disconnect', function(){
+      console.log('Disconnect event');
+      clients--;
+    });
+
+  });
 
 
 app.use('/', function(req,res,next){
@@ -112,7 +150,7 @@ app.post('/login',function(req,res){
               console.log("found my mans" , result[i].username);
               console.log("ok checking pass now...");
               // test_clients.push(result[i].username);
-              ssn.username = result[i].username;
+              current_user = result[i].username;
               bcrypt.compare(req.body.password, result[i].password, function(err, res) {
                 user_exist = res;
                 console.log(user_exist + "you entered ");
@@ -150,112 +188,37 @@ app.post("/lobby" , function(req,res){
 
   console.log("serving game page");
   console.log('please work ', test_clients[clients]);
-
   console.log('big picture ', test_clients);
-
-
-  for(var i = 0 ; i < clients; i++)
-  {
-    clientsockets[i] = {username:test_clients[i], socketid:sockets[i]};
-  }
-
   console.log(clientsockets)
-
-  io.on('connection', function(socket){
-      console.log('new connection');
-      clients++;
-      socket_glob = socket.id;
-
-      // for(var i = 0 ; i < clients; i++)
-      // {
-      //   if(clientsocket[i].sockets === socket.id)
-      //   {
-      //     current_user =
-      //   }
-      // }
-
-      console.log('clients' , clients);
-
-      // sockets.push(socket.id);
-
-      console.log('their socket id ',socket.id)
-
-
-
-
-
-
-
-       console.log("current_user= " ,current_user);
-
-       // current_user = ssn.username;
-
-      // socket.on('joinroom', function(data){
-      //   console.log('joined the room' , data);
-      //   room = data;
-      //   socket.join(data);
-      // })
-
-      socket.emit('users',{current_user:current_user,clients:clients} );
-
-      socket.on('chat', function(message){
-        message.username = current_user;
-        socket.broadcast.emit('message',message);
-      });
-
-
-
-
-      socket.on('themove', function(move){
-        console.log("broadcasting the move" , move);
-
-        if(move.current === 1)
-        {
-          move.current= 2;
-        }
-
-        else if(move.current === 2) {
-          move.current = 1;
-        }
-
-        console.log(move.current);
-
-
-
-        socket.broadcast.emit('the_move', move);
-      });
-
-    socket.on('disconnect', function(){
-      console.log('Disconnect event');
-      clients--;
-    });
-
-  });
-  // current_user = test_clients[clients]
-
 
 
   //everyone can see this, need to fix
 
 
   res.redirect('/gamepage');
+
+
 });
-
-
-
 
 
 app.get("/gamepage" , function(req,res){
 
-  ssn = req.session;
-  console.log('the ssn usre',ssn.username);
 
+
+  ssn = req.session
+
+  flag =1;
+  console.log('the ssn usre',ssn.username);
   console.log("serving game page");
+
+
+
   //everyone can see this, need to fix
 
 
 
-  return res.sendFile(__dirname + "/gamepage.html");
+   return res.sendFile(__dirname + "/gamepage.html");
+
 });
 
 
