@@ -6,14 +6,74 @@ var obj;
 var objj;
 var current = 1;
 var old_current;
+var username;
+var room_name = "parsa";
+var clientid =0;
 
 
-socket.on('connection', function(data){
-    console.log("connected");
-});
+
+
+
+
 $(document).ready(function() {
+  // socket.emit('joinroom', room_name);
+
+  socket.on('connection', function(data){
+      console.log("connected clients", data);
+
+
+  });
+
+  socket.on('users', function(data){
+    username = data.current_user;
+
+    console.log(username + ' has connected')
+    $('#chat').text('Chat '+username);
+    socket.emit('chat',{username:username});
+
+
+  });
+
+
+  socket.on('disconnect', function(data){
+    console.log("disconnected");
+  })
+  // socket.emit('joinroom', room_name);
+
+
 
   randomize();
+
+  socket.on('message',function(message){
+    if(message.msg === undefined)
+    {
+      //do nothing
+    }
+    else {
+      printMessage(message.msg)
+    }
+});
+document.forms[0].onsubmit = function () {
+  console.log("im here");
+    var input = document.getElementById("messager");
+    var msg = username + ": " + input.value
+    printMessage(msg);
+    socket.emit('chat',{msg:msg , username:username});
+    input.value = '';
+
+};
+
+
+
+
+
+  function printMessage(message) {
+      var p = document.createElement("h2");
+      p.innerText = message;
+      document.getElementById('message').appendChild(p);
+  }
+
+
 
 
 $('.btn_3d').click(function() {
@@ -72,6 +132,8 @@ $('.btn_3d').click(function() {
 
 
   });
+
+
 
   function randomize()
   {

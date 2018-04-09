@@ -22,6 +22,25 @@
       width: 100vw;
     }
 
+    #message{
+      font-size: 10px;
+
+    }
+    #chat{
+      position: auto;
+      left: 50px;
+    }
+
+    .online {
+      position: auto;
+      width: 20%;
+      height:80%;
+      background-color: skyblue;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      z-index: 2;
+    }
     .btn_3d {
       display: block;
       margin: 0 auto;
@@ -67,8 +86,8 @@
     .btn_3d>span {
       background: white;
       border: none;
-      -webkit-box-shadow: 1px 73px      transform: rotateX(10deg);
- 41px -22px rgba(0, 0, 0, 0.75);
+      -webkit-box-shadow: 1px 73px
+      transform: rotateX(10deg);
       box-shadow: 1px 73px 41px -22px rgba(0, 0, 0, 0.75);
       cursor: pointer;
       display: block;
@@ -180,6 +199,19 @@
 </head>
 
 <body>
+
+  <div class="online">
+    <h2 id="chat">Chat</h2>
+    <div id="message">
+    </div>
+
+    <form action="javascript:void(0)">
+    <input type="text" id="messager" placeholder="type a message..." required autofocus>
+   </form>
+
+  </div>
+
+
 
   <table class="tg0">
     <tr>
