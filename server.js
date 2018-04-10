@@ -123,7 +123,7 @@ MongoClient.connect(url, function(err, db) {
         });
         time = time - Date.now();
       }
-        io.in(room).emit('the_move', move);
+        socket.broadcast.to(room).emit('the_move', move);
       });
       socket.on('wholost', function(name){
         var myquery = { username: name};
@@ -222,7 +222,28 @@ app.get("/lobby", function(req,res){
 
   console.log("serving page")
   var lobby;
+  if(clients > 2)
+  {
+    console.log('too many people');
+  }
+  else if(clients == 2 || clients === 1)
+  {
+    dbo.collection("users").find({}).toArray(function(err, result){
+      if(err) throw err;
 
+      lobby = dynamic.lobby(result);
+      fs.writeFile("./lobby.html",lobby,function(err,data){
+        if(err)
+        {
+          console.log(err);
+        }
+        else{
+          console.log("file write success")
+          res.sendFile(__dirname + "/lobby.html");
+        }
+      });
+    });
+  }
   dbo.collection("users").find({}).toArray(function(err, result){
     if(err) throw err;
 

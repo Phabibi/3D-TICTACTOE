@@ -72,10 +72,6 @@ document.forms[0].onsubmit = function () {
 
 };
 
-
-
-
-
   function printMessage(message) {
       var p = document.createElement("h2");
       p.innerText = message;
