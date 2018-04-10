@@ -1,7 +1,6 @@
 exports.lobby = function(people){
-
   console.log("making the lobby");
-
+  var thing = JSON.stringify(people);
   var page = `
   <html>
      <head>
@@ -17,15 +16,23 @@ exports.lobby = function(people){
 
      </form>
 
+     <div id = "inme">.</div>
+     <table>`
 
+     for(var i=0; i<people.length; i++){
+        page += "<tr>"
+        page +=`<td>`+thing[i]
+ + `</td></tr>`;
+     }
+
+      page += ` </table>
      </body>
-
   <script> src = "./style.js/" </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
-  <link rel="stylesheet" href="/style.css"/> `
+  <link rel="stylesheet" href="/style.css"/> `;
 
  return page;
 }

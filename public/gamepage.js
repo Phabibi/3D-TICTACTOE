@@ -14,10 +14,10 @@ $(document).ready(function() {
   // socket.emit('joinroom', room_name);
 
 
-    socket.on('connect', function(socket){
-      socket.emit('joinroom' ,room_name);
+    socket.on('connect', function(data){
+      socket.emit('joinroom' , "");
 
-      console.log('username ', data.current_user );
+      // console.log('username ', data.current_user );
       console.log('connected now joining room');
   });
 
@@ -47,7 +47,20 @@ $(document).ready(function() {
     else {
       printMessage(message.msg)
     }
+
 });
+
+socket.on('winnerwinnerchickendinner', function(name){
+	console.log( name + "has won" );
+  if(name == username){
+    alert("You win");
+  }
+  else{
+    alert("You lost");
+    socket.emit('wholost', username);
+  }
+});
+
 document.forms[0].onsubmit = function () {
   console.log("im here");
     var input = document.getElementById("messager");
@@ -95,7 +108,7 @@ $('.btn_3d').click(function() {
 
         old_current = current;
 
-        socket.emit("themove" , {move:move, obj:objj, current:current} )
+        socket.emit("themove" , {move:move, obj:objj, current:current, user:username} )
       }
 
 

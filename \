@@ -23,13 +23,11 @@ var boardHelpers = require("./public/boardHelpers.js");
 var ticTac = boardHelpers.createArray(3,3,3);
 boardHelpers.initArray(ticTac);
 var current_user;
-var username1 = "";
+
 var test_clients = new Array;
 var sockets = new Array;
 var clientsockets = new Array;
 var dynamic = require ('./public/dynamic.js');
-var moves = 0;
-var date;
 // parsing body
 app.use(express.json());
 app.use(express.urlencoded( { extended:false} ));
@@ -59,7 +57,7 @@ MongoClient.connect(url, function(err, db) {
         console.log('joined the room' , room);
       });
       socket.join(room);
-      time = Date.now();
+
       socket.emit('users',{current_user:current_user , clients:clients, roomname:room} );
 
 
@@ -68,7 +66,6 @@ MongoClient.connect(url, function(err, db) {
         socket.broadcast.to(room).emit('message',message);
       });
       socket.on('themove', function(move){
-        moves++;
         console.log("broadcasting the move" , move);
 
         if(move.current === 1)
@@ -79,60 +76,22 @@ MongoClient.connect(url, function(err, db) {
           move.current = 1;
         }
         console.log(move.current);
-
-    	var indexes = boardHelpers.numberToIndex(move.move);
-     	move.obj == 'X'? ticTac[indexes[0]][indexes[1]][indexes[2]] = 1 : ticTac[indexes[0]][indexes[1]][indexes[2]] = 0;
-    	console.log(ticTac);
-    	var win = boardHelpers.check3Dboard(ticTac);
-    	console.log("HELLO THIS IS THE WIN NUMBER : " + win);
-    	if(win!=-1){
-    		if(win == 1 || win == 3){
-          username1 = move.user;
-          console.log('user1', username1);
-          socket.emit('winnerwinnerchickendinner',username1);
-
-    			console.log("X has wooooooooooooooooooon");
-    		}
-    		if(win == 0){
-          username1 = move.user;
-          console.log('user2', username1);
-
-
-
-    			console.log("OOOOOO zero has WON");
-    		}
-        username1 = move.user;
-        console.log('user1', username1);
-        var newGame = {
-          moves: moves,
-          time: time,
-          winner: username1
-        };
-        dbo.collection("users").insertOne(newGame, function(err, res) {
-          if (err) throw err;
-          console.log("Inserted game");
-        });
-        io.in(room).emit('winnerwinnerchickendinner',username1);
-        console.log("resetting array ... ");
-        boardHelpers.initArray(ticTac);
-        var myquery = { username: username1 };
-        var newvalues = { $inc: {wins:1}};
-        dbo.collection("users").updateOne(myquery, newvalues, function(err, res) {
-          if (err) throw err;
-          console.log("1 wins");
-        });
-        time = time - Date.now();
-        res.redirect('/lobby');
-      }
-        io.in(room).emit('the_move', move);
-      });
-      socket.on('wholost', function(name){
-        var myquery = { username: name};
-        var newvalues = { $inc: {losses:1}};
-        dbo.collection("users").updateOne(myquery, newvalues, function(err, res) {
-          if (err) throw err;
-          console.log("1 loss added ");
-        });
+	
+	var indexes = boardHelpers.numberToIndex(move.move);
+ 	move.obj == 'X'? ticTac[indexes[0]][indexes[1]][indexes[2]] = 1 : ticTac[indexes[0]][indexes[1]][indexes[2]] = 0;
+	console.log(ticTac);
+	var win = boardHelpers.check3Dboard(ticTac);
+	console.log("HELLO THIS IS THE WIN NUMBER : " + win);
+	if(win!=-1){
+		if(win == 1){
+			console.log("X has wooooooooooooooooooon");
+		}
+		if(win == 0){
+			console.log("OOOOOO zero has WON");
+		}
+	socket.broadcast.emit("winnerwinnerchickendinner", move.username);
+	}
+        socket.broadcast.emit('the_move', move);
       });
 
       socket.on('disconnect', function(){
@@ -175,8 +134,6 @@ app.post('/register', function(req,res){
       gender : req.body.gender,
       age : req.body.age,
       email : req.body.email,
-      wins : 0,
-      losses: 0
     };
     bcrypt.genSalt(10, function(err, salt) {
       bcrypt.hash(newUser.password, salt, function(err, hash) {
@@ -223,13 +180,10 @@ app.post('/login',function(req,res){
       });
 app.get("/lobby", function(req,res){
   console.log("serving page")
-  var lobby;
-  dbo.collection("users").find({}).toArray(function(err, result){
-    if(err) throw err;
-
-    lobby = dynamic.lobby(result);
-    ssn = req.ssn;
-    fs.writeFile("./lobby.html",lobby,function(err,data){
+  var result;
+  var lobby = dynamic.lobby(result);
+  ssn = req.ssn;
+  fs.writeFile("./lobby.html",lobby,function(err,data){
 
       if(err)
       {
@@ -241,11 +195,7 @@ app.get("/lobby", function(req,res){
         res.sendFile(__dirname + "/lobby.html");
       }
 
-    });
-
   });
-
-
 
 
 
@@ -256,7 +206,7 @@ app.post("/lobby" , function(req,res){
   console.log("serving game page");
   console.log('please work ', test_clients[clients]);
   console.log('big picture ', test_clients);
-  console.log(clientsockets);
+  console.log(clientsockets)
 
 
   //everyone can see this, need to fix
