@@ -51,17 +51,49 @@ $(document).ready(function() {
 
 });
 
-socket.on('winnerwinnerchickendinner', function(name){
-	console.log( name + "has won" );
-  if(name == username){
-    alert("You win");
+socket.on('winnerwinnerchickendinner', function(stats){
+	console.log( username + "has won" );
+  if(username == stats.winner){
+    alert("You won! \n Here are the game's stats: \n Winner: " + stats.winner +
+          " \n Moves Played: "+ stats.moves + " \n Time elapsed (in ms): "+ stats.time +
+            "\n To view further stats, you must log out and log back in to view \n "+
+            "the leaderboard. This is for security reasons... trust me. \n Click ok to LOG OUT ");
+            window.location.href = "login.html";
   }
   else{
-    alert("You lost");
+    alert("You lost \n Here are the game's stats: \n Winner: " + stats.winner +
+          " \n Moves Played: "+ stats.moves + " \n Time elapsed (in ms): "+ stats.time +
+            "\n To view further stats, you must log out and log back in to view \n "+
+            "the leaderboard. This is for security reasons... trust me. \n Click ok to LOG OUT ");
+            window.location.href = "login.html";
     socket.emit('wholost', username);
   }
 });
 
+socket.on('winnerwinnerchickendinnerREVERSED', function(stats){
+	console.log( username + "has won" );
+  if(username == stats.winner){
+    alert("You Resigned! \n Here are the game's stats: \n Loser: " + stats.winner +
+          " \n Moves Played: "+ stats.moves + " \n Time elapsed (in ms): "+ stats.time +
+            "\n To view further stats, you must log out and log back in to view \n "+
+            "the leaderboard. This is for security reasons... trust me. \n Click ok to LOG OUT ");
+            window.location.href = "login.html";
+  }
+  else{
+    alert("You Won from resignation \n Here are the game's stats: \n Loser: " + stats.winner +
+          " \n Moves Played: "+ stats.moves + " \n Time elapsed (in ms): "+ stats.time +
+            "\n To view further stats, you must log out and log back in to view \n "+
+            "the leaderboard. This is for security reasons... trust me. \n Click ok to LOG OUT ");
+            window.location.href = "login.html";
+    socket.emit('wholost', username);
+  }
+  window.location.href = "login.html";
+});
+
+socket.on('stats', function(stats){
+	console.log( name + "has won" );
+
+});
 document.forms[0].onsubmit = function () {
   console.log("im here");
     var input = document.getElementById("messager");
@@ -69,6 +101,17 @@ document.forms[0].onsubmit = function () {
     printMessage(msg);
     socket.emit('chat',{msg:msg , username:username});
     input.value = '';
+
+};
+
+document.forms[1].onsubmit = function () {
+  console.log("im here");
+    var notMe = 0;
+    objj == 'O' ? notMe = 1 : notMe = 0;
+//    socket.emit('winnerwinnerchickendinner',);
+    socket.emit("themove" , {move:notMe, obj:'RESIGNATION', current:current, user:username} );
+
+    //input.value = '';
 
 };
 

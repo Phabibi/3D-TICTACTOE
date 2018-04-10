@@ -30,6 +30,7 @@ var clientsockets = new Array;
 var dynamic = require ('./public/dynamic.js');
 var moves = 0;
 var date;
+var time;
 // parsing body
 app.use(express.json());
 app.use(express.urlencoded( { extended:false} ));
@@ -59,7 +60,7 @@ MongoClient.connect(url, function(err, db) {
         console.log('joined the room' , room);
       });
       socket.join(room);
-      time = Date.now();session
+      time =  new Date().getTime();
       socket.emit('users',{current_user:current_user , clients:clients, roomname:room} );
 
 
@@ -70,7 +71,10 @@ MongoClient.connect(url, function(err, db) {
       socket.on('themove', function(move){
         moves++;
         console.log("broadcasting the move" , move);
-
+        var resignFlag = false;
+        if(move.obj == 'RESIGNATION'){
+          resignFlag = true;
+        }
         if(move.current === 1)
         {
           move.current= 2;
@@ -83,26 +87,26 @@ MongoClient.connect(url, function(err, db) {
     	var indexes = boardHelpers.numberToIndex(move.move);
      	move.obj == 'X'? ticTac[indexes[0]][indexes[1]][indexes[2]] = 1 : ticTac[indexes[0]][indexes[1]][indexes[2]] = 0;
     	console.log(ticTac);
+
     	var win = boardHelpers.check3Dboard(ticTac);
-    	console.log("HELLO THIS IS THE WIN NUMBER : " + win);
+      if(resignFlag){
+        win = move.move;
+      }
+      console.log("HELLO THIS IS THE WIN NUMBER : " + win);
     	if(win!=-1){
     		if(win == 1 || win == 3){
           username1 = move.user;
           console.log('user1', username1);
-          socket.emit('winnerwinnerchickendinner',username1);
-
     			console.log("X has wooooooooooooooooooon");
     		}
     		if(win == 0){
           username1 = move.user;
           console.log('user2', username1);
-
-
-
     			console.log("OOOOOO zero has WON");
     		}
         username1 = move.user;
         console.log('user1', username1);
+        time = new Date().getTime() - time;
         var newGame = {
           moves: moves,
           time: time,
@@ -112,7 +116,14 @@ MongoClient.connect(url, function(err, db) {
           if (err) throw err;
           console.log("Inserted game");
         });
-        io.in(room).emit('winnerwinnerchickendinner',username1);
+
+        if(resignFlag){
+          io.in(room).emit('winnerwinnerchickendinnerREVERSED',newGame);
+        }
+        else {
+          io.in(room).emit('winnerwinnerchickendinner',newGame);
+        }
+        // io.in(room).emit('stats', newGame);
         console.log("resetting array ... ");
         boardHelpers.initArray(ticTac);
         var myquery = { username: username1 };
@@ -121,7 +132,7 @@ MongoClient.connect(url, function(err, db) {
           if (err) throw err;
           console.log("1 wins");
         });
-        time = time - Date.now();
+        //time = time - Date.now();
       }
         socket.broadcast.to(room).emit('the_move', move);
       });
