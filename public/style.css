@@ -4,7 +4,8 @@
 
 body
 {
-	background: #c9c9c9;
+	background: skyblue;
+	font-family: 'Lato', sans-serif;
 }
 
 h5
@@ -22,13 +23,14 @@ h5
 
 .tabs .indicator
 {
-	background-color: #e0f2f1;
+	background-color:Aquamarine ;
 	height: 100px;
 	opacity: 0.3;
 }
 
 .form-container
 {
+
 	padding: 40px;
 	padding-top: 10px;
 }
@@ -36,4 +38,28 @@ h5
 .confirmation-tabs-btn
 {
 	position: relative;
+}
+
+table{
+ border: 1px solid black;
+ border-collapse: collapse;
+ table-layout: fixed;
+ width: 100%;
+ background: white;
+	}
+td{
+white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+}
+#box {
+	background: radial-gradient(ellipse at center,  rgba(81,112,173,1) 0%,rgb(0, 191, 255) 100%);
+	border:1px solid black;
+	box-shadow: 0 1px #5670A4 inset, 0 0 10px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	width: 1000px;
+	height: 1000px;
+	margin: 60px auto;
+	padding: 50px 30px 0 30px;
+	text-align: center;
 }

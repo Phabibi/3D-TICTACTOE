@@ -59,7 +59,7 @@ MongoClient.connect(url, function(err, db) {
         console.log('joined the room' , room);
       });
       socket.join(room);
-      time = Date.now();
+      time = Date.now();session
       socket.emit('users',{current_user:current_user , clients:clients, roomname:room} );
 
 
@@ -122,7 +122,6 @@ MongoClient.connect(url, function(err, db) {
           console.log("1 wins");
         });
         time = time - Date.now();
-        res.redirect('/lobby');
       }
         io.in(room).emit('the_move', move);
       });
@@ -156,9 +155,7 @@ app.get('/', function(req,res,next){
     ssn = req.session;
   }
   console.log("serving page");
-
   res.sendFile(__dirname + "/public/login.html");
-
 });
 
 app.get('/registersuccess' , function(req,res){
@@ -185,15 +182,12 @@ app.post('/register', function(req,res){
             dbo.collection("users").insertOne(newUser, function(err, res) {
               if (err) throw err;
               console.log("Inserted user: " + req.body.username + " with password "+ newUser.password);
-            //  db.close();
             });
             res.redirect('/registersuccess');
-
-
         });
+      });
     });
 
-    });
 app.post('/login',function(req,res){
       console.log("checking username and pass")
       console.log("current email ", req.body.email)
@@ -210,7 +204,8 @@ app.post('/login',function(req,res){
               console.log("found my mans" , result[i].username);
               console.log("ok checking pass now...");
               // test_clients.push(result[i].username);
-              current_user = result[i].username;
+              ssn.username = result[i].username;
+              current_user = ssn.username;
               bcrypt.compare(req.body.password, result[i].password, function(err, res) {
                 user_exist = res;
                 console.log(user_exist + "you entered ");
@@ -221,74 +216,48 @@ app.post('/login',function(req,res){
           }
         });
       });
+
 app.get("/lobby", function(req,res){
+  ssn = req.session
+
   console.log("serving page")
   var lobby;
+
   dbo.collection("users").find({}).toArray(function(err, result){
     if(err) throw err;
 
     lobby = dynamic.lobby(result);
-    ssn = req.ssn;
     fs.writeFile("./lobby.html",lobby,function(err,data){
-
       if(err)
       {
         console.log(err);
       }
-
       else{
         console.log("file write success")
         res.sendFile(__dirname + "/lobby.html");
       }
-
     });
-
   });
-
-
-
-
-
 });
 app.post("/lobby" , function(req,res){
-
+  ssn = req.session
 
   console.log("serving game page");
   console.log('please work ', test_clients[clients]);
   console.log('big picture ', test_clients);
   console.log(clientsockets);
-
-
   //everyone can see this, need to fix
-
-
   res.redirect('/gamepage');
-
-
 });
 
-
 app.get("/gamepage" , function(req,res){
-
-
-
   ssn = req.session
+
 
   flag =1;
   console.log('the ssn usre',ssn.username);
   console.log("serving game page");
-
-
-
   //everyone can see this, need to fix
-
-
-
    return res.sendFile(__dirname + "/gamepage.html");
-
 });
-
-
-
-
 console.log("running on port ", port );

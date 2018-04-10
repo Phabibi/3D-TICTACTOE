@@ -26,6 +26,7 @@ $(document).ready(function() {
     room_name = data.room_name;
     console.log('room si ', room_name)
     console.log(username + ' has connected')
+    $('#chat').text('Chat '+username);
     socket.emit('chat',{username:username});
   });
 
