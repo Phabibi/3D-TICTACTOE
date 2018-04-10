@@ -6,12 +6,13 @@ var path = require('path');
 var session =require('express-session');
 var fs = require('fs');
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://cmpt218:pass@ds061777.mlab.com:61777/cmpt218"
+var url = "mongodb://phabibi:aG7aeqaa@127.0.0.1:27017/cmpt218_phabibi?authSource=admin"
 var bcrypt = require('bcryptjs');
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 20682;
 var Bigres;
 var server = http.createServer(app).listen(port);
 var io = require('socket.io')(server);
+var resignFlag = false;
 var dbo;
 var ssn;
 var students;
@@ -27,6 +28,7 @@ var username1 = "";
 var test_clients = new Array;
 var sockets = new Array;
 var clientsockets = new Array;
+var user_arr = new Array;
 var dynamic = require ('./public/dynamic.js');
 var moves = 0;
 var date;
@@ -71,10 +73,9 @@ MongoClient.connect(url, function(err, db) {
       socket.on('themove', function(move){
         moves++;
         console.log("broadcasting the move" , move);
-        var resignFlag = false;
         if(move.obj == 'RESIGNATION'){
           resignFlag = true;
-        }
+        }	7
         if(move.current === 1)
         {
           move.current= 2;
@@ -90,6 +91,12 @@ MongoClient.connect(url, function(err, db) {
 
     	var win = boardHelpers.check3Dboard(ticTac);
       if(resignFlag){
+        var myquery = { username: move.user };
+        var newvalues = { $inc: {losses:1}};
+        dbo.collection("users").updateOne(myquery, newvalues, function(err, res) {
+          if (err) throw err;
+          console.log("1 wins");
+        });
         win = move.move;
       }
       console.log("HELLO THIS IS THE WIN NUMBER : " + win);
@@ -126,22 +133,28 @@ MongoClient.connect(url, function(err, db) {
         // io.in(room).emit('stats', newGame);
         console.log("resetting array ... ");
         boardHelpers.initArray(ticTac);
-        var myquery = { username: username1 };
-        var newvalues = { $inc: {wins:1}};
-        dbo.collection("users").updateOne(myquery, newvalues, function(err, res) {
-          if (err) throw err;
-          console.log("1 wins");
-        });
+        if(!resignFlag){
+          var myquery = { username: username1 };
+          var newvalues = { $inc: {wins:1}};
+          dbo.collection("users").updateOne(myquery, newvalues, function(err, res) {
+            if (err) throw err;
+            console.log("1 wins");
+          });
+        }
+
         //time = time - Date.now();
       }
         socket.broadcast.to(room).emit('the_move', move);
       });
       socket.on('wholost', function(name){
         var myquery = { username: name};
-        var newvalues = { $inc: {losses:1}};
-        dbo.collection("users").updateOne(myquery, newvalues, function(err, res) {
+        var newValues;
+        console.log( name + " should have a win now if this is TRUE : " + resignFlag );
+        resignFlag?  newValues = { $inc: {wins:1}} :  newValues = { $inc: {losses:1}} ;
+        dbo.collection("users").updateOne(myquery, newValues, function(err, res) {
           if (err) throw err;
           console.log("1 loss added ");
+          resignFlag = false;
         });
       });
 
@@ -229,7 +242,10 @@ app.post('/login',function(req,res){
       });
 
 app.get("/lobby", function(req,res){
-  ssn = req.session
+  console.log(ssn);
+  if(ssn == undefined){
+    res.redirect('/');
+  }
 
   console.log("serving page")
   var lobby;
@@ -283,7 +299,9 @@ app.post("/lobby" , function(req,res){
 });
 
 app.get("/gamepage" , function(req,res){
-  ssn = req.session
+  if(ssn == undefined){
+    res.redirect('/');
+  }
 
 
   flag =1;

@@ -39,28 +39,34 @@ exports.lobby = function(people){
     var the_table = document.getElementById("tablu");
     var arr = new Array;
     var students = `+ss+`;
+    var swag = 0;
     for(var i = 0 ; i < students.length; i++)
-          {
-            arr[i] = the_table.insertRow(i);
-            arr[i].insertCell(0);
-            arr[i].insertCell(1);
-            arr[i].insertCell(2);
-            arr[i].insertCell(3);
+        {
 
+            if(students[i].first_name )
+            {
+              arr[swag] = the_table.insertRow(swag);
+              arr[swag].insertCell(0);
+              arr[swag].insertCell(1);
+              arr[swag].insertCell(2);
+              arr[swag].insertCell(3);
+              swag++;
+            }
 
-          }
+        }
+        console.log(students.length);
+        swag = 0;
           for(var i =0; i < students.length; i++)
           {
-            for(var j = 0; j < students.length; j++)
-            {
-                if(students[i].first_name || students[i].username ||students[i].wins ||  students[i].losses){
-                  the_table.rows[i].cells[0].innerHTML = students[i].first_name
-                  the_table.rows[i].cells[1].innerHTML = students[i].username
-                  the_table.rows[i].cells[2].innerHTML = students[i].wins
-                  the_table.rows[i].cells[3].innerHTML = students[i].losses
-                }
 
-            }
+              if(students[i].first_name != undefined)
+                  {
+                  the_table.rows[swag].cells[0].innerHTML = students[i].first_name
+                  the_table.rows[swag].cells[1].innerHTML = students[i].username
+                  the_table.rows[swag].cells[2].innerHTML = students[i].wins
+                  the_table.rows[swag].cells[3].innerHTML = students[i].losses
+                  swag++;
+                  }
           }
 
 

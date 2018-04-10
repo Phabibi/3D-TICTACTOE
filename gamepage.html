@@ -78,6 +78,22 @@
 
 
     }
+    .butt{
+      position:  absolute;
+      left: 500px;
+      right: 400px;
+      top: 1000px;
+      z-index: 100;
+      text-align: center;
+      cursor: pointer;
+      font-size:24px;
+      margin: 0 0 0 100px;
+      background-color: DeepSkyBlue;
+    }
+    .butt:hover{
+      opacity: 0.5;
+      right: 0;
+    }
 
     .btn_3d * {
       -webkit-box-sizing: border-box;
@@ -405,7 +421,7 @@
   <div class = 'container'>
   <center>
   <form  action='javascript:void(0)' >
-    <button type='submit' class = 'btn waves-effect waves-light teal' name='finish'>Quit/Login To Start New Game</button>
+    <button type='submit' class = 'butt' name='finish'>Quit/Login To Start New Game</button>
   </form>
 </center>
 </div>
